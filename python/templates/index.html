@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FAA Drone Rules Evaluator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        .result { margin-top: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+        .approved { background-color: #dff0d8; border-color: #d6e9c6; }
+        .denied { background-color: #f2dede; border-color: #ebccd1; }
+        .section { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        h3 { margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FAA Drone Rules Evaluator</h1>
+        <p>Enter your drone operation details below to check compliance with FAA regulations.</p>
+        
+        <form id="droneForm">
+            <div class="section">
+                <h3>Drone Characteristics</h3>
+                <div class="form-group">
+                    <label for="drone_category">Drone Category:</label>
+                    <select id="drone_category" name="drone_category">
+                        <option value="Category1">Category 1 (less than 0.55 lbs)</option>
+                        <option value="Category2" selected>Category 2 (less than 11ft-lbs kinetic energy)</option>
+                        <option value="Category3">Category 3 (restricted areas only)</option>
+                        <option value="Category4">Category 4 (requires airworthiness certificate)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="drone_weight">Weight (pounds):</label>
+                    <input type="number" id="drone_weight" name="drone_weight" value="1.5" step="0.1" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="has_anti_collision_lighting">Has Anti-Collision Lighting:</label>
+                    <select id="has_anti_collision_lighting" name="has_anti_collision_lighting">
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="has_remote_id">Has Remote ID:</label>
+                    <select id="has_remote_id" name="has_remote_id">
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="has_airworthiness_certificate">Has Airworthiness Certificate:</label>
+                    <select id="has_airworthiness_certificate" name="has_airworthiness_certificate">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="complies_with_kinetic_energy_limit">Complies with Kinetic Energy Limit:</label>
+                    <select id="complies_with_kinetic_energy_limit" name="complies_with_kinetic_energy_limit">
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="has_exposed_rotating_parts">Has Exposed Rotating Parts:</label>
+                    <select id="has_exposed_rotating_parts" name="has_exposed_rotating_parts">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Operation Details</h3>
+                <div class="form-group">
+                    <label for="time_of_day">Time of Day:</label>
+                    <select id="time_of_day" name="time_of_day">
+                        <option value="day" selected>Day</option>
+                        <option value="night">Night</option>
+                        <option value="civil_twilight">Civil Twilight</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="operating_over_people">Operating Over People:</label>
+                    <select id="operating_over_people" name="operating_over_people">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="operating_altitude">Altitude (feet):</label>
+                    <input type="number" id="operating_altitude" name="operating_altitude" value="200" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="operating_speed">Speed (knots):</label>
+                    <input type="number" id="operating_speed" name="operating_speed" value="35" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="is_within_400ft_of_structure">Within 400ft of Structure:</label>
+                    <select id="is_within_400ft_of_structure" name="is_within_400ft_of_structure">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="operating_altitude_above_structure">Altitude Above Structure (feet):</label>
+                    <input type="number" id="operating_altitude_above_structure" name="operating_altitude_above_structure" value="0" min="0">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Environment Details</h3>
+                <div class="form-group">
+                    <label for="airspace_class">Airspace Class:</label>
+                    <select id="airspace_class" name="airspace_class">
+                        <option value="G" selected>Class G</option>
+                        <option value="E">Class E</option>
+                        <option value="D">Class D</option>
+                        <option value="C">Class C</option>
+                        <option value="B">Class B</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="is_airport_surface_area">In Airport Surface Area:</label>
+                    <select id="is_airport_surface_area" name="is_airport_surface_area">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="is_restricted_access_area">In Restricted Access Area:</label>
+                    <select id="is_restricted_access_area" name="is_restricted_access_area">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="flight_visibility">Visibility (statute miles):</label>
+                    <input type="number" id="flight_visibility" name="flight_visibility" value="5" min="0" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="distance_from_clouds_horizontal">Horizontal Distance from Clouds (feet):</label>
+                    <input type="number" id="distance_from_clouds_horizontal" name="distance_from_clouds_horizontal" value="2500" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="distance_from_clouds_vertical">Vertical Distance from Clouds (feet):</label>
+                    <input type="number" id="distance_from_clouds_vertical" name="distance_from_clouds_vertical" value="600" min="0">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>People Details</h3>
+                <div class="form-group">
+                    <label for="people_are_participants">People are Direct Participants:</label>
+                    <select id="people_are_participants" name="people_are_participants">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="people_under_cover">People are Under Cover:</label>
+                    <select id="people_under_cover" name="people_under_cover">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Pilot Information</h3>
+                <div class="form-group">
+                    <label for="pilot_has_night_training">Pilot Has Night Training:</label>
+                    <select id="pilot_has_night_training" name="pilot_has_night_training">
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="has_atc_authorization">Has ATC Authorization:</label>
+                    <select id="has_atc_authorization" name="has_atc_authorization">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="remote_pilot_certificate">Has Remote Pilot Certificate:</label>
+                    <select id="remote_pilot_certificate" name="remote_pilot_certificate">
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="button" onclick="evaluateDrone()">Evaluate Operation</button>
+            <button type="button" onclick="generateReport()" style="margin-left: 10px; background-color: #4b70e2; color: white; padding: 10px 15px; border: none; cursor: pointer;">Generate PDF Report</button>
+        </form>
+        
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+    
+    <script>
+        function evaluateDrone() {
+            const form = document.getElementById('droneForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (const [key, value] of formData.entries()) {
+                // Convert boolean strings to actual booleans
+                if (value === 'true' || value === 'false') {
+                    data[key] = value === 'true';
+                }
+                // Convert numeric strings to numbers
+                else if (!isNaN(value) && value !== '') {
+                    data[key] = Number(value);
+                }
+                else {
+                    data[key] = value;
+                }
+            }
+            
+            fetch('/api/evaluate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                
+                if (result.status === 'APPROVED') {
+                    resultDiv.className = 'result approved';
+                    resultDiv.innerHTML = `<h2>✅ APPROVED</h2><p>${result.details[0]}</p>`;
+                } else {
+                    resultDiv.className = 'result denied';
+                    let html = `<h2>❌ DENIED</h2><p>Your drone operation violates the following FAA rules:</p><ul>`;
+                    for (const detail of result.details) {
+                        html += `<li>${detail}</li>`;
+                    }
+                    html += '</ul>';
+                    resultDiv.innerHTML = html;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result denied';
+                resultDiv.innerHTML = `<h2>Error</h2><p>An error occurred: ${error.message}</p>`;
+            });
+        }
+        
+        function generateReport() {
+            const form = document.getElementById('droneForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (const [key, value] of formData.entries()) {
+                // Convert boolean strings to actual booleans
+                if (value === 'true' || value === 'false') {
+                    data[key] = value === 'true';
+                }
+                // Convert numeric strings to numbers
+                else if (!isNaN(value) && value !== '') {
+                    data[key] = Number(value);
+                }
+                else {
+                    data[key] = value;
+                }
+            }
+            
+            fetch('/api/report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Network response was not ok');
+            })
+            .then(blob => {
+                // Create a link to download the PDF
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'drone_compliance_report.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error generating report: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>

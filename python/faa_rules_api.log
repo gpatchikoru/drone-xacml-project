@@ -1,0 +1,111 @@
+2025-02-27 03:40:50,060 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 03:40:50,060 - faa-rules-api - INFO - Created example_operations.json file
+2025-02-27 03:42:27,553 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 03:42:27,613 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.134:8080
+2025-02-27 03:42:27,614 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-02-27 03:42:27,614 - werkzeug - INFO -  * Restarting with stat
+2025-02-27 03:42:27,750 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 03:42:27,770 - werkzeug - WARNING -  * Debugger is active!
+2025-02-27 03:42:27,780 - werkzeug - INFO -  * Debugger PIN: 936-803-926
+2025-02-27 03:42:30,848 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 03:42:30] "GET / HTTP/1.1" 200 -
+2025-02-27 03:42:31,284 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 03:42:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-02-27 03:42:53,219 - faa-rules-api - INFO - Received evaluation request: {'drone_category': 'Category3', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 03:42:53,220 - faa-rules-api - INFO - Evaluation result: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 03:42:53,221 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 03:42:53] "POST /api/evaluate HTTP/1.1" 200 -
+2025-02-27 03:59:03,383 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 03:59:03,439 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.134:8080
+2025-02-27 03:59:03,439 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-02-27 03:59:03,439 - werkzeug - INFO -  * Restarting with stat
+2025-02-27 03:59:03,639 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 03:59:03,656 - werkzeug - WARNING -  * Debugger is active!
+2025-02-27 03:59:03,664 - werkzeug - INFO -  * Debugger PIN: 936-803-926
+2025-02-27 03:59:09,411 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 03:59:09] "GET / HTTP/1.1" 200 -
+2025-02-27 03:59:13,841 - faa-rules-api - INFO - Received report generation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 03:59:13,841 - faa-rules-api - INFO - Evaluation result for report: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 03:59:13,842 - faa-rules-api - ERROR - Error generating report: "Style 'Title' already defined in stylesheet"
+Traceback (most recent call last):
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/python/faa_rules_api.py", line 714, in create_report
+    filename, pdf_data = generate_compliance_report(operation, result)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/python/faa_rules_api.py", line 505, in generate_compliance_report
+    styles.add(ParagraphStyle(
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/venv/lib/python3.12/site-packages/reportlab/lib/styles.py", line 254, in add
+    raise KeyError("Style '%s' already defined in stylesheet" % key)
+KeyError: "Style 'Title' already defined in stylesheet"
+2025-02-27 03:59:13,846 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 03:59:13] "[35m[1mPOST /api/report HTTP/1.1[0m" 500 -
+2025-02-27 03:59:43,851 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 03:59:43] "GET /api/docs HTTP/1.1" 200 -
+2025-02-27 04:00:00,757 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:00:00] "GET / HTTP/1.1" 200 -
+2025-02-27 04:00:03,711 - faa-rules-api - INFO - Received evaluation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:00:03,712 - faa-rules-api - INFO - Evaluation result: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:00:03,712 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:00:03] "POST /api/evaluate HTTP/1.1" 200 -
+2025-02-27 04:00:05,726 - faa-rules-api - INFO - Received report generation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:00:05,727 - faa-rules-api - INFO - Evaluation result for report: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:00:05,728 - faa-rules-api - ERROR - Error generating report: "Style 'Title' already defined in stylesheet"
+Traceback (most recent call last):
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/python/faa_rules_api.py", line 714, in create_report
+    filename, pdf_data = generate_compliance_report(operation, result)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/python/faa_rules_api.py", line 505, in generate_compliance_report
+    styles.add(ParagraphStyle(
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/venv/lib/python3.12/site-packages/reportlab/lib/styles.py", line 254, in add
+    raise KeyError("Style '%s' already defined in stylesheet" % key)
+KeyError: "Style 'Title' already defined in stylesheet"
+2025-02-27 04:00:05,730 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:00:05] "[35m[1mPOST /api/report HTTP/1.1[0m" 500 -
+2025-02-27 04:01:47,060 - faa-rules-api - INFO - Received evaluation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': True, 'remote_pilot_certificate': True}
+2025-02-27 04:01:47,061 - faa-rules-api - INFO - Evaluation result: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:01:47,062 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:01:47] "POST /api/evaluate HTTP/1.1" 200 -
+2025-02-27 04:04:45,373 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 04:04:45,434 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.134:8080
+2025-02-27 04:04:45,434 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-02-27 04:04:45,435 - werkzeug - INFO -  * Restarting with stat
+2025-02-27 04:04:45,638 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 04:04:45,657 - werkzeug - WARNING -  * Debugger is active!
+2025-02-27 04:04:45,667 - werkzeug - INFO -  * Debugger PIN: 936-803-926
+2025-02-27 04:04:48,677 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:04:48] "GET / HTTP/1.1" 200 -
+2025-02-27 04:04:50,475 - faa-rules-api - INFO - Received evaluation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:04:50,476 - faa-rules-api - INFO - Evaluation result: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:04:50,477 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:04:50] "POST /api/evaluate HTTP/1.1" 200 -
+2025-02-27 04:04:52,201 - faa-rules-api - INFO - Received report generation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:04:52,202 - faa-rules-api - INFO - Evaluation result for report: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:04:52,202 - faa-rules-api - ERROR - Error generating report: "Style 'Title' already defined in stylesheet"
+Traceback (most recent call last):
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/python/faa_rules_api.py", line 713, in create_report
+    filename, pdf_data = generate_compliance_report(operation, result)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/python/faa_rules_api.py", line 505, in generate_compliance_report
+    styles.add(ParagraphStyle(
+  File "/Users/girishkumarpatchikoru/drone-xacml-project/venv/lib/python3.12/site-packages/reportlab/lib/styles.py", line 254, in add
+    raise KeyError("Style '%s' already defined in stylesheet" % key)
+KeyError: "Style 'Title' already defined in stylesheet"
+2025-02-27 04:04:52,205 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:04:52] "[35m[1mPOST /api/report HTTP/1.1[0m" 500 -
+2025-02-27 04:09:20,129 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 04:09:20,191 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.134:8080
+2025-02-27 04:09:20,191 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-02-27 04:09:20,192 - werkzeug - INFO -  * Restarting with stat
+2025-02-27 04:09:20,396 - faa-rules-api - INFO - Starting FAA Drone Rules API Server
+2025-02-27 04:09:20,413 - werkzeug - WARNING -  * Debugger is active!
+2025-02-27 04:09:20,421 - werkzeug - INFO -  * Debugger PIN: 936-803-926
+2025-02-27 04:09:23,913 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:09:23] "GET / HTTP/1.1" 200 -
+2025-02-27 04:09:25,763 - faa-rules-api - INFO - Received evaluation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:09:25,764 - faa-rules-api - INFO - Evaluation result: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:09:25,764 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:09:25] "POST /api/evaluate HTTP/1.1" 200 -
+2025-02-27 04:09:28,046 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:09:28] "GET / HTTP/1.1" 200 -
+2025-02-27 04:09:29,264 - faa-rules-api - INFO - Received report generation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:09:29,265 - faa-rules-api - INFO - Evaluation result for report: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:09:29,282 - faa-rules-api - INFO - Generated report: reports/drone_compliance_report_1935bb10.pdf
+2025-02-27 04:09:29,283 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:09:29] "POST /api/report HTTP/1.1" 200 -
+2025-02-27 04:09:42,542 - faa-rules-api - INFO - Received evaluation request: {'drone_category': 'Category2', 'drone_weight': 1.5, 'has_anti_collision_lighting': True, 'has_remote_id': True, 'has_airworthiness_certificate': False, 'complies_with_kinetic_energy_limit': True, 'has_exposed_rotating_parts': False, 'time_of_day': 'day', 'operating_over_people': False, 'operating_altitude': 200, 'operating_speed': 35, 'is_within_400ft_of_structure': False, 'operating_altitude_above_structure': 0, 'airspace_class': 'G', 'is_airport_surface_area': False, 'is_restricted_access_area': False, 'flight_visibility': 5, 'distance_from_clouds_horizontal': 2500, 'distance_from_clouds_vertical': 600, 'people_are_participants': False, 'people_under_cover': False, 'pilot_has_night_training': True, 'has_atc_authorization': False, 'remote_pilot_certificate': True}
+2025-02-27 04:09:42,543 - faa-rules-api - INFO - Evaluation result: {'status': 'APPROVED', 'details': ['Operation complies with FAA regulations'], 'raw_decision': {'decision': 'Permit', 'obligations': [], 'advice': []}}
+2025-02-27 04:09:42,545 - werkzeug - INFO - 127.0.0.1 - - [27/Feb/2025 04:09:42] "POST /api/evaluate HTTP/1.1" 200 -

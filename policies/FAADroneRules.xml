@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicySet xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+           PolicySetId="FAA-Drone-Rules-PolicySet"
+           Version="1.0"
+           PolicyCombiningAlgId="urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:ordered-permit-overrides">
+    
+    <Description>XACML policies for FAA drone rules organized in priority order</Description>
+    
+    <!--Policy 1: Night Operation-->
+    <Policy PolicyId="night-operation-policy" 
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
+        <Description>Rules for operating drones at night</Description>
+        <Target>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">night</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                            AttributeId="time-of-day" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Match>
+                </AllOf>
+            </AnyOf>
+        </Target>
+        
+        <!-- Rule: Night Operation Knowledge Requirement -->
+        <Rule RuleId="Night-Operation-Knowledge-Requirement" Effect="Permit">
+            <Description>Remote pilot must have completed night training after April 6, 2021</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject" 
+                            AttributeId="has-completed-night-training" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="has-anti-collision-lighting" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Night Operation Lighting Requirement -->
+        <Rule RuleId="Night-Operation-Lighting-Requirement" Effect="Permit">
+            <Description>Drone must have anti-collision lighting visible for 3 statute miles</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                        AttributeId="has-anti-collision-lighting" 
+                        DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                        MustBePresent="true"/>
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+    
+    <!-- Policy 2: Operation Over Human Beings -->
+    <Policy PolicyId="operation-over-people-policy" 
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:first-applicable">
+        <Description>Rules for operating drones over people</Description>
+        <Target>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" 
+                            AttributeId="is-operating-over-people" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Match>
+                </AllOf>
+            </AnyOf>
+        </Target>
+        
+        <!-- Rule: Operation Over Participants -->
+        <Rule RuleId="Operation-Over-Participants" Effect="Permit">
+            <Description>Allow operation over people who are direct participants</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                        AttributeId="people-are-participants" 
+                        DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                        MustBePresent="true"/>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Operation Over Covered People -->
+        <Rule RuleId="Operation-Over-Covered-People" Effect="Permit">
+            <Description>Allow operation over people under covered structures</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                        AttributeId="people-under-cover" 
+                        DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                        MustBePresent="true"/>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Category 1 Weight Limit -->
+        <Rule RuleId="Category1-Weight-Limit" Effect="Permit">
+            <Description>Allow Category 1 operations (drone under 0.55 pounds)</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-less-than">
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                        AttributeId="drone-weight" 
+                        DataType="http://www.w3.org/2001/XMLSchema#double" 
+                        MustBePresent="true"/>
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">0.55</AttributeValue>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Category 2 Operations -->
+        <Rule RuleId="Category2-Kinetic-Energy-Limit" Effect="Permit">
+            <Description>Allow Category 2 operations (kinetic energy limit)</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">Category2</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="drone-category" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="complies-with-kinetic-energy-limit" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Category 3 Restricted Area -->
+        <Rule RuleId="Category3-Restricted-Area" Effect="Permit">
+            <Description>Allow Category 3 operations in restricted access areas</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">Category3</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="drone-category" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="is-restricted-access-area" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Category 4 Airworthiness Certificate -->
+        <Rule RuleId="Category4-Airworthiness-Certificate" Effect="Permit">
+            <Description>Allow Category 4 operations with airworthiness certificate</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">Category4</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="drone-category" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                            AttributeId="has-airworthiness-certificate" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+    
+    <!-- Policy 3: Airspace Restrictions -->
+    <Policy PolicyId="airspace-restrictions-policy" 
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
+        <Description>Rules for operating in different airspace classes</Description>
+        <Target>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">[ABCDE]</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                            AttributeId="airspace-class" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Match>
+                </AllOf>
+            </AnyOf>
+        </Target>
+        
+        <!-- Rule: Operation in Class B/C/D Airspace -->
+        <Rule RuleId="Operation-Class-BCD-Airspace" Effect="Permit">
+            <Description>Allow operation in Class B, C, or D airspace with ATC authorization</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">[BCD]</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                            AttributeId="airspace-class" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" 
+                            AttributeId="has-atc-authorization" 
+                            DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                            MustBePresent="true"/>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Operation in Class E Airspace -->
+        <Rule RuleId="Operation-Class-E-Airspace" Effect="Permit">
+            <Description>Allow operation in Class E airspace with ATC authorization if near airport</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">E</AttributeValue>
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                            AttributeId="airspace-class" 
+                            DataType="http://www.w3.org/2001/XMLSchema#string" 
+                            MustBePresent="true"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:or">
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">false</AttributeValue>
+                            <AttributeDesignator 
+                                Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                                AttributeId="is-airport-surface-area" 
+                                DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                                MustBePresent="true"/>
+                        </Apply>
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                            <AttributeDesignator 
+                                Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" 
+                                AttributeId="has-atc-authorization" 
+                                DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                                MustBePresent="true"/>
+                        </Apply>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+    
+    <!-- Policy 4: Operating Limitations -->
+    <Policy PolicyId="operating-limitations-policy" 
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
+        <Description>Rules for general operating limitations</Description>
+        <Target/>
+        
+        <!-- Rule: Speed Limit -->
+        <Rule RuleId="Speed-Limit" Effect="Permit">
+            <Description>Allow operation if speed is under 87 knots</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-less-than-or-equal">
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" 
+                        AttributeId="operating-speed" 
+                        DataType="http://www.w3.org/2001/XMLSchema#double" 
+                        MustBePresent="true"/>
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">87.0</AttributeValue>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Altitude Limit -->
+        <Rule RuleId="Altitude-Limit" Effect="Permit">
+            <Description>Allow operation if altitude is under 400 feet (with structure exception)</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:or">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-less-than-or-equal">
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" 
+                            AttributeId="operating-altitude" 
+                            DataType="http://www.w3.org/2001/XMLSchema#double" 
+                            MustBePresent="true"/>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">400.0</AttributeValue>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                            <AttributeDesignator 
+                                Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                                AttributeId="is-within-400ft-of-structure" 
+                                DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                                MustBePresent="true"/>
+                        </Apply>
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-less-than-or-equal">
+                            <AttributeDesignator 
+                                Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" 
+                                AttributeId="operating-altitude-above-structure" 
+                                DataType="http://www.w3.org/2001/XMLSchema#double" 
+                                MustBePresent="true"/>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">400.0</AttributeValue>
+                        </Apply>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Visibility Requirement -->
+        <Rule RuleId="Visibility-Requirement" Effect="Permit">
+            <Description>Allow operation if visibility is at least 3 statute miles</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-greater-than-or-equal">
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                        AttributeId="flight-visibility" 
+                        DataType="http://www.w3.org/2001/XMLSchema#double" 
+                        MustBePresent="true"/>
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">3.0</AttributeValue>
+                </Apply>
+            </Condition>
+        </Rule>
+        
+        <!-- Rule: Cloud Distance Requirement -->
+        <Rule RuleId="Cloud-Distance-Requirement" Effect="Permit">
+            <Description>Allow operation if drone maintains required distance from clouds</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-greater-than-or-equal">
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                            AttributeId="distance-from-clouds-horizontal" 
+                            DataType="http://www.w3.org/2001/XMLSchema#double" 
+                            MustBePresent="true"/>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">2000.0</AttributeValue>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-greater-than-or-equal">
+                        <AttributeDesignator 
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment" 
+                            AttributeId="distance-from-clouds-vertical" 
+                            DataType="http://www.w3.org/2001/XMLSchema#double" 
+                            MustBePresent="true"/>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">500.0</AttributeValue>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+    
+    <!-- Policy 5: Remote ID -->
+    <Policy PolicyId="remote-id-policy" 
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
+        <Description>Rules for Remote ID compliance</Description>
+        <Target/>
+        
+        <!-- Rule: Remote ID Requirement -->
+        <Rule RuleId="Remote-ID-Requirement" Effect="Permit">
+            <Description>Require drones to broadcast identification and location</Description>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:boolean-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+                    <AttributeDesignator 
+                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" 
+                        AttributeId="has-remote-id" 
+                        DataType="http://www.w3.org/2001/XMLSchema#boolean" 
+                        MustBePresent="true"/>
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+</PolicySet>

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Compliant Operation",
+    "description": "A fully compliant drone operation",
+    "operation": {
+      "drone_category": "Category2",
+      "drone_weight": 1.5,
+      "has_anti_collision_lighting": true,
+      "has_remote_id": true,
+      "time_of_day": "day",
+      "operating_over_people": false,
+      "operating_altitude": 200,
+      "operating_speed": 35,
+      "airspace_class": "G",
+      "flight_visibility": 5,
+      "distance_from_clouds_horizontal": 2500,
+      "distance_from_clouds_vertical": 600,
+      "complies_with_kinetic_energy_limit": true,
+      "pilot_has_night_training": true,
+      "remote_pilot_certificate": true
+    }
+  },
+  {
+    "name": "Non-Compliant Operation",
+    "description": "Drone operation with multiple violations",
+    "operation": {
+      "drone_category": "Category2",
+      "drone_weight": 1.5,
+      "has_anti_collision_lighting": true,
+      "has_remote_id": false,
+      "time_of_day": "day",
+      "operating_over_people": false,
+      "operating_altitude": 600,
+      "operating_speed": 35,
+      "airspace_class": "G",
+      "flight_visibility": 2,
+      "distance_from_clouds_horizontal": 2500,
+      "distance_from_clouds_vertical": 600,
+      "complies_with_kinetic_energy_limit": true,
+      "pilot_has_night_training": false,
+      "remote_pilot_certificate": true
+    }
+  }
+]
