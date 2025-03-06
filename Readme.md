@@ -1,6 +1,8 @@
 # FAA Drone Rules Evaluator
 
-A comprehensive solution for evaluating drone operations against FAA regulations. This system uses a direct implementation approach to evaluate drone operations for compliance with FAA rules and generates detailed PDF reports.
+A comprehensive solution for evaluating drone operations against FAA regulations. This system uses a direct implementation approach to evaluate drone operations for compliance with FAA rules and generates detailed PDF reports. 
+
+our own pratical implementation. not used existing autoforce pdp engines 
 
 ## Table of Contents
 
